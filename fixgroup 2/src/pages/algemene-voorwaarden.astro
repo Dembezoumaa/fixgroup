@@ -1,0 +1,73 @@
+---
+// Algemene voorwaarden · /algemene-voorwaarden/
+// PLACEHOLDER — laat juridisch controleren vóór go-live.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/content.js';
+---
+<BaseLayout
+  title="Algemene voorwaarden"
+  description={`Algemene voorwaarden van ${site.name}.`}
+  noindex={true}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Voorwaarden</span>
+    </nav>
+  </div>
+
+  <section class="sec" style="padding-top: 24px;">
+    <div class="wrap" style="max-width: 720px;">
+      <div class="eyebrow">Juridisch</div>
+      <h1 class="h1" style="margin-top: 8px;">Algemene voorwaarden</h1>
+
+      <div style="margin-top: 16px; padding: 16px; background: var(--red-50, #FDE8EA); border-left: 3px solid var(--red); border-radius: 6px; font-size: 13px;">
+        <b>Concept — laat juridisch controleren</b><br />
+        Dit is een template. Vóór go-live moet deze tekst worden aangepast en gecontroleerd door een jurist. Overweeg om de METAAL-UNIE-voorwaarden of UNETO-VNI-voorwaarden te gebruiken.
+      </div>
+
+      <div style="margin-top: 40px; font-size: 16px; line-height: 1.7; color: var(--ink-2);">
+        <h2 class="h3">1. Toepasselijkheid</h2>
+        <p>
+          Deze algemene voorwaarden zijn van toepassing op alle offertes, overeenkomsten en diensten van {site.name} (KvK {site.kvk}).
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">2. Offertes en prijzen</h2>
+        <p>
+          Offertes zijn 30 dagen geldig. Prijzen zijn inclusief btw tenzij anders vermeld. Wij werken met vaste prijzen vooraf — meerwerk wordt altijd vooraf besproken en schriftelijk bevestigd.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">3. Uitvoering</h2>
+        <p>
+          Wij voeren de werkzaamheden uit naar beste inzicht en vermogen, volgens de geldende normen (VCA, NEN 1010). Bij spoedoproepen geldt gemiddeld een reactietijd van {site.emergencyResponse} minuten binnen ons werkgebied.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">4. Garantie</h2>
+        <p>
+          Op installatiewerk geven wij 2 jaar garantie. Op reparaties 3 maanden. Garantie vervalt bij ondeskundig gebruik, eigenhandige wijzigingen of schade door derden.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">5. Betaling</h2>
+        <p>
+          Facturen dienen binnen 14 dagen na factuurdatum te worden voldaan. Bij niet-tijdige betaling brengen wij de wettelijke rente en incassokosten in rekening.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">6. Aansprakelijkheid</h2>
+        <p>
+          Onze aansprakelijkheid is beperkt tot het bedrag dat onze aansprakelijkheidsverzekering in dat geval uitkeert. Wij zijn niet aansprakelijk voor indirecte schade of gevolgschade.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">7. Klachten</h2>
+        <p>
+          Klachten over uitgevoerd werk dient u binnen 14 dagen na oplevering schriftelijk te melden via <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">8. Toepasselijk recht</h2>
+        <p>
+          Op alle overeenkomsten is Nederlands recht van toepassing. Geschillen worden voorgelegd aan de bevoegde rechter in het arrondissement van {site.address.city}.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

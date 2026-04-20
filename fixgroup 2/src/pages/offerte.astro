@@ -1,0 +1,148 @@
+---
+// Offertepagina · /offerte/
+// Simpel formulier met branch-picker en contactvelden.
+// Let op: formulier heeft nog geen backend — submit-handler komt in stap 3.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { branches, site } from '../data/content.js';
+---
+<BaseLayout
+  title="Offerte aanvragen — antwoord binnen 4 werkuren"
+  description={`Vraag snel een offerte aan bij ${site.name}. Binnen 4 werkuren reactie, vaste prijs vooraf, geen verrassingen.`}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Offerte</span>
+    </nav>
+  </div>
+
+  <section class="hub-hero">
+    <div class="wrap">
+      <div class="hub-hero-grid">
+        <div>
+          <div class="eyebrow">Offerte</div>
+          <h1 style="margin-top: 16px;">Offerte in<br />2 minuten<br />aangevraagd.</h1>
+          <p class="tagline">
+            Vul onderstaand formulier in, of bel direct. Wij reageren binnen 4 werkuren met een eerlijke prijsindicatie. Geen verplichtingen — puur informatief.
+          </p>
+
+          <ul class="offerte-perks" style="list-style: none; padding: 0; margin-top: 32px;">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Reactie binnen 4 werkuren — meestal dezelfde dag
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Vaste prijs vooraf, geen nacalculatie
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Garantie op alle werkzaamheden
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              {site.rating.toString().replace('.', ',')}/5 · {site.reviewCount} reviews
+            </li>
+          </ul>
+
+          <div style="margin-top: 32px; padding: 20px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;">
+            <div class="mono" style="color: var(--ink-3); font-size: 11px;">LIEVER BELLEN?</div>
+            <div style="font-family: var(--f-mono); font-size: 22px; font-weight: 600; margin-top: 4px;">
+              <a href={`tel:${site.phoneRaw}`}>{site.phone}</a>
+            </div>
+            <div style="color: var(--ink-2); font-size: 13px; margin-top: 4px;">24/7 bereikbaar · direct antwoord</div>
+          </div>
+        </div>
+
+        {/* Formulier */}
+        <div>
+          <form class="form" method="post" action="/offerte/bedankt/" style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 32px;">
+            <div class="form-q">1 · Voor welke tak?</div>
+            <div class="branch-picker">
+              {branches.map((b) => (
+                <label class="branch-pick" style={`--bcolor: ${b.color};`}>
+                  <input
+                    type="radio"
+                    name="branch"
+                    value={b.slug}
+                    required
+                    style="position: absolute; opacity: 0; pointer-events: none;"
+                  />
+                  <span class="bdot"></span>
+                  <div>
+                    <div class="btext">{b.short}</div>
+                    <div class="bsub">{b.services.length} diensten</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            <div class="form-q" style="margin-top: 24px;">2 · Uw gegevens</div>
+            <div class="form-field">
+              <label for="name">Naam *</label>
+              <input type="text" id="name" name="name" required placeholder="Uw naam" />
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="phone">Telefoon *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="06 12 34 56 78" />
+              </div>
+              <div class="form-field">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="u@voorbeeld.nl" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="postcode">Postcode</label>
+              <input type="text" id="postcode" name="postcode" placeholder="1211 CL" />
+            </div>
+
+            <div class="form-q" style="margin-top: 24px;">3 · Wat zoekt u?</div>
+            <div class="form-field">
+              <label for="message">Omschrijving *</label>
+              <textarea id="message" name="message" rows="4" required placeholder="Bijv: lekkende kraan in keuken, cv-ketel valt uit, verhuisklus zaterdag..." style="resize: vertical;"></textarea>
+            </div>
+
+            <label class="form-toggle">
+              <input type="checkbox" name="spoed" style="position: absolute; opacity: 0; pointer-events: none;" />
+              <div class="sw"></div>
+              <div class="lbl">Dit is een spoedgeval</div>
+              <span style="font-size: 11px; color: var(--ink-3); font-family: var(--f-mono);">24/7</span>
+            </label>
+
+            <div class="form-nav" style="margin-top: 24px;">
+              <button type="submit" class="btn btn-red btn-lg" style="width: 100%; justify-content: center;">
+                Offerte aanvragen →
+              </button>
+            </div>
+            <p style="margin-top: 12px; font-size: 11px; color: var(--ink-3); text-align: center;">
+              Door te verzenden gaat u akkoord met onze <a href="/privacy/" style="text-decoration: underline;">privacyverklaring</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Simpele UX: klik op label highlightt de gekozen tak.
+  document.querySelectorAll('.branch-pick').forEach((label) => {
+    const input = label.querySelector('input');
+    if (!input) return;
+    input.addEventListener('change', () => {
+      document.querySelectorAll('.branch-pick').forEach((l) => l.classList.remove('selected'));
+      if (input.checked) label.classList.add('selected');
+    });
+  });
+
+  // Spoed toggle styling
+  document.querySelectorAll('.form-toggle').forEach((toggle) => {
+    const input = toggle.querySelector('input[type="checkbox"]');
+    if (!input) return;
+    input.addEventListener('change', () => {
+      toggle.classList.toggle('on', input.checked);
+    });
+  });
+</script>

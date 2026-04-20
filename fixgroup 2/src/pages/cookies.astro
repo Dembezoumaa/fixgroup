@@ -1,0 +1,58 @@
+---
+// Cookieverklaring · /cookies/
+// PLACEHOLDER — pas aan op basis van werkelijk gebruikte analytics / cookies.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/content.js';
+---
+<BaseLayout
+  title="Cookieverklaring"
+  description={`Cookieverklaring van ${site.name}.`}
+  noindex={true}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Cookies</span>
+    </nav>
+  </div>
+
+  <section class="sec" style="padding-top: 24px;">
+    <div class="wrap" style="max-width: 720px;">
+      <div class="eyebrow">Juridisch</div>
+      <h1 class="h1" style="margin-top: 8px;">Cookieverklaring</h1>
+
+      <div style="margin-top: 16px; padding: 16px; background: var(--red-50, #FDE8EA); border-left: 3px solid var(--red); border-radius: 6px; font-size: 13px;">
+        <b>Concept — pas aan na keuze analytics</b><br />
+        Deze tekst gaat uit van géén tracking-cookies. Zodra u Google Analytics, Plausible of vergelijkbaar toevoegt, moet deze verklaring worden uitgebreid en een cookiebanner worden toegevoegd.
+      </div>
+
+      <div style="margin-top: 40px; font-size: 16px; line-height: 1.7; color: var(--ink-2);">
+        <h2 class="h3">Wat zijn cookies?</h2>
+        <p>
+          Cookies zijn kleine tekstbestanden die tijdens uw bezoek aan onze website op uw apparaat worden geplaatst.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Welke cookies gebruiken wij?</h2>
+        <p>
+          Op dit moment gebruikt {site.name} geen tracking- of marketing-cookies. De website functioneert zonder dat wij uw surfgedrag volgen.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Externe diensten</h2>
+        <p>
+          Wij laden lettertypes van Google Fonts. Dit kan een beperkt aantal technische gegevens (zoals uw IP-adres) doorgeven aan Google op het moment dat de lettertypes worden opgehaald.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Wijzigingen</h2>
+        <p>
+          Wanneer wij in de toekomst analytics of andere cookies gaan gebruiken, vindt u dat hier terug en vragen wij u vooraf om toestemming via een cookiebanner.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Vragen?</h2>
+        <p>
+          Mail ons op <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

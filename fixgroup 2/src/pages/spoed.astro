@@ -1,0 +1,137 @@
+---
+// Spoed landingspagina · /spoed/
+// Ultra-CTA gerichte pagina voor spoedgevallen. Bel-knop altijd boven de fold.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { branches, site } from '../data/content.js';
+
+const spoedServices = branches.flatMap((b) =>
+  b.services.filter((s) => s.spoed).map((s) => ({ ...s, branch: b }))
+);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'EmergencyService',
+  name: `${site.name} — Spoedservice`,
+  telephone: site.phoneRaw,
+  hoursAvailable: 'Mo-Su 00:00-23:59',
+  areaServed: { '@type': 'City', name: site.address.city },
+};
+---
+<BaseLayout
+  title="Spoed 24/7 — vakman binnen 45 min"
+  description={`${site.name} spoeddienst: loodgieter, elektricien of klusser binnen gemiddeld ${site.emergencyResponse} minuten ter plaatse. 24/7 bereikbaar, ook weekend en feestdagen.`}
+  structuredData={structuredData}
+>
+    <div class="wrap">
+      <nav class="crumb" aria-label="Broodkruimel">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <span>Spoed</span>
+      </nav>
+    </div>
+
+    {/* Hero: één zeer duidelijke CTA */}
+    <section style="padding: 48px 0 64px;">
+      <div class="wrap">
+        <div style="background: var(--red); color: #fff; border-radius: 18px; padding: 56px; text-align: center; position: relative; overflow: hidden;">
+          <div style="display: inline-flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 100px; font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); animation: pulse 1.4s infinite;"></span>
+            Nu actief · 24/7 bemand
+          </div>
+          <h1 style="font-size: clamp(44px, 8vw, 96px); line-height: 0.95; letter-spacing: -0.035em; margin-top: 20px; font-weight: 700;">
+            Spoed?<br />Bel direct.
+          </h1>
+          <div style="font-family: var(--f-mono); font-size: clamp(36px, 5vw, 64px); font-weight: 600; margin-top: 32px; letter-spacing: -0.02em;">
+            <a href={`tel:${site.phoneRaw}`} style="color: #fff; text-decoration: none; border-bottom: 4px solid rgba(255,255,255,0.3);">
+              {site.phone}
+            </a>
+          </div>
+          <p style="font-size: 18px; opacity: 0.9; margin-top: 24px; max-width: 520px; margin-left: auto; margin-right: auto;">
+            Gem. reactietijd <b>{site.emergencyResponse} minuten</b> binnen ons kernwerkgebied. Ook nachten, weekenden en feestdagen.
+          </p>
+          <div style="margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-lg" style="background: #fff; color: var(--red); font-size: 17px; padding: 16px 28px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Bel nu: {site.phone}
+            </a>
+            <a href={`https://wa.me/${site.whatsapp.replace('+', '')}`} class="btn btn-dark btn-lg">
+              Of WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Wat telt als spoed */}
+    <section class="sec" style="padding-top: 0;">
+      <div class="wrap">
+        <div class="eyebrow">Wanneer bellen?</div>
+        <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">Dit zijn typische spoedgevallen.</h2>
+        <div class="services-grid">
+          {spoedServices.map((s, i) => (
+            <a href={`/diensten/${s.branch.slug}/${s.slug}/`} class="service-card">
+              <div class="s-num">{String(i + 1).padStart(2, '0')}</div>
+              <h3>{s.title}</h3>
+              <p>{s.desc}</p>
+              <div class="foot">
+                <span class="spoed-tag">● {s.branch.short.toUpperCase()}</span>
+                <span class="arr-circle">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Wat te doen tot we er zijn */}
+    <section class="sec" style="padding-top: 0;">
+      <div class="wrap">
+        <div class="two-col">
+          <div class="pane">
+            <h3>Bij lekkage — wat u nu kunt doen</h3>
+            <ul>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Draai de hoofdkraan dicht (meterkast of kelder)
+              </li>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Vang water op met emmers of handdoeken
+              </li>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Zet elektrische apparaten uit die onder water komen
+              </li>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Bel ons — we zijn binnen {site.emergencyResponse} min onderweg
+              </li>
+            </ul>
+          </div>
+          <div class="pane">
+            <h3>Bij stroomstoring — check eerst dit</h3>
+            <ul>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Meterkast: is een groep uitgesprongen? Reset hem.
+              </li>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Komt hij direct weer uit? Niet forceren — laat hem uit.
+              </li>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Trek verdachte apparaten uit stopcontacten
+              </li>
+              <li>
+                <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Bel ons — NEN 1010 gecertificeerde elektricien komt zo
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+</BaseLayout>

@@ -1,0 +1,125 @@
+---
+// Werkgebied overzicht · /werkgebied/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqSection from '../../components/FaqSection.jsx';
+import { workgebied, site } from '../../data/content.js';
+---
+<BaseLayout
+  title="Werkgebied — 't Gooi, Randstad en heel Nederland"
+  description={`${site.name} werkt vanuit ${site.address.city} in heel 't Gooi en de Randstad. Bekijk alle plaatsen waar we actief zijn.`}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Werkgebied</span>
+    </nav>
+  </div>
+
+  <section class="hub-hero">
+    <div class="wrap">
+      <div class="hub-hero-grid">
+        <div>
+          <div class="eyebrow">Werkgebied</div>
+          <h1 style="margin-top: 16px;">Vanuit Hilversum,<br />actief in heel<br /><span style="color: var(--red)">Nederland</span>.</h1>
+          <p class="tagline">
+            Onze thuisbasis is {site.address.city}. Binnen {site.emergencyResponse} minuten rijden we naar 't Gooi, Amsterdam, Utrecht en Amersfoort. Op afspraak werken we in heel Nederland.
+          </p>
+          <div style="margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/offerte/" class="btn btn-red btn-lg">Offerte aanvragen →</a>
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-ghost btn-lg">Bel {site.phone}</a>
+          </div>
+        </div>
+        <div class="hub-hero-stats">
+          <div class="s">
+            <div class="v">{site.emergencyResponse} min</div>
+            <div class="l">Reactietijd kernwerkgebied</div>
+          </div>
+          <div class="s">
+            <div class="v">{workgebied.length}+</div>
+            <div class="l">Kernplaatsen</div>
+          </div>
+          <div class="s">
+            <div class="v">24/7</div>
+            <div class="l">Dag &amp; nacht bemand</div>
+          </div>
+          <div class="s">
+            <div class="v">NL</div>
+            <div class="l">Op afspraak landelijk</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Plaatsen grid */}
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow">Kernplaatsen</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">
+        Waar wij dagelijks komen.
+      </h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;">
+        {workgebied.map((plaats, i) => (
+          <a
+            href={`/werkgebied/${plaats.toLowerCase()}/`}
+            style="display: flex; align-items: center; justify-content: space-between; padding: 20px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: var(--ink); transition: border-color 0.12s, transform 0.12s;"
+            onmouseover="this.style.borderColor='var(--ink)'"
+            onmouseout="this.style.borderColor='var(--line)'"
+          >
+            <div>
+              <div style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-3);">
+                {String(i + 1).padStart(2, '0')}
+              </div>
+              <div style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin-top: 4px;">
+                {plaats}
+              </div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Extra info */}
+  <section class="sec" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="two-col">
+        <div class="pane">
+          <h3>Staat uw plaats er niet tussen?</h3>
+          <p style="color: var(--ink-2); font-size: 14px; line-height: 1.6;">
+            Geen zorgen — op afspraak werken we in heel Nederland. Bel ons of bekijk per tak wat we voor u kunnen betekenen.
+          </p>
+          <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-dark btn-sm">Bel {site.phone}</a>
+            <a href="/offerte/" class="btn btn-ghost btn-sm">Offerte aanvragen</a>
+          </div>
+        </div>
+        <div class="pane dark">
+          <h3>Reactietijden per zone</h3>
+          <ul>
+            <li style="color: rgba(255,255,255,0.85);">
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><b style="color: #fff;">'t Gooi</b> — {site.emergencyResponse} min gemiddeld</span>
+            </li>
+            <li style="color: rgba(255,255,255,0.85);">
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><b style="color: #fff;">Amsterdam &amp; Utrecht</b> — 60–75 min</span>
+            </li>
+            <li style="color: rgba(255,255,255,0.85);">
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><b style="color: #fff;">Randstad overige</b> — 75–90 min</span>
+            </li>
+            <li style="color: rgba(255,255,255,0.85);">
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><b style="color: #fff;">Rest van NL</b> — op afspraak</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <FaqSection client:visible />
+</BaseLayout>

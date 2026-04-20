@@ -1,0 +1,106 @@
+---
+// Over ons · /over-ons/
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReviewsSection from '../components/ReviewsSection.astro';
+import FaqSection from '../components/FaqSection.jsx';
+import { site, branches } from '../data/content.js';
+---
+<BaseLayout
+  title={`Over ${site.name} — vakmensen uit ${site.address.city}`}
+  description={`${site.name}: ${site.yearsActive} jaar ervaring, ${site.jobsDone}+ klussen, 4 takken onder één dak. Lees wie we zijn en waar we voor staan.`}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Over ons</span>
+    </nav>
+  </div>
+
+  <section class="hub-hero">
+    <div class="wrap">
+      <div class="hub-hero-grid">
+        <div>
+          <div class="eyebrow">Over ons</div>
+          <h1 style="margin-top: 16px;">Vier takken,<br />één team,<br /><span style="color: var(--red)">{site.yearsActive} jaar</span> ervaring.</h1>
+          <p class="tagline">
+            {site.name} ontstond uit een simpele frustratie: voor elke klus een andere partij bellen. Tegenwoordig regelen we het in huis — loodgieter, elektricien, schoonmaak en 24/7 service, allemaal onder één dak.
+          </p>
+          <div style="margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/offerte/" class="btn btn-red btn-lg">Offerte aanvragen →</a>
+            <a href="/contact/" class="btn btn-ghost btn-lg">Contact opnemen</a>
+          </div>
+        </div>
+        <div class="hub-hero-stats">
+          <div class="s">
+            <div class="v">{site.yearsActive}</div>
+            <div class="l">Jaar actief</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.jobsDone.toLocaleString('nl-NL')}+</div>
+            <div class="l">Klussen afgerond</div>
+          </div>
+          <div class="s">
+            <div class="v">{branches.reduce((s, b) => s + b.services.length, 0)}</div>
+            <div class="l">Diensten in portfolio</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.rating.toString().replace('.', ',')}/5</div>
+            <div class="l">{site.reviewCount} reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Verhaal */}
+  <section class="sec">
+    <div class="wrap" style="max-width: 720px;">
+      <div class="eyebrow">Onze manier van werken</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 24px;">Vakmanschap zonder gedoe.</h2>
+      <p style="font-size: 17px; color: var(--ink-2); line-height: 1.65;">
+        We geloven dat goed werk begint bij duidelijke afspraken. Daarom geven we <b>altijd</b> een vaste prijs vooraf — geen nacalculatie, geen verrassingen achteraf. Onze vakmensen zijn gecertificeerd (VCA voor loodgieters, NEN 1010 voor elektra), en we nemen de tijd om het goed te doen.
+      </p>
+      <p style="font-size: 17px; color: var(--ink-2); line-height: 1.65; margin-top: 20px;">
+        Spoed? Dan rijden we 24 uur per dag, 7 dagen per week. Gemiddeld staat een vakman binnen {site.emergencyResponse} minuten voor uw deur in ons kernwerkgebied rond {site.address.city}. Voor geplande klussen plannen we in overleg — vaak binnen één werkdag.
+      </p>
+      <p style="font-size: 17px; color: var(--ink-2); line-height: 1.65; margin-top: 20px;">
+        En als het klaar is, laten we het netjes achter. Want een klus is pas geklaard als <em>ú</em> tevreden bent.
+      </p>
+    </div>
+  </section>
+
+  {/* Waarden */}
+  <section class="sec" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="eyebrow">Waar we voor staan</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">Vier beloftes, geen kleine lettertjes.</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="s-num">01</div>
+          <h3>Heldere prijs</h3>
+          <p>Vaste prijs vooraf, inclusief materiaal en voorrijden. Wat we afspreken is wat u betaalt — geen nacalculatie.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-num">02</div>
+          <h3>Gecertificeerd vakmanschap</h3>
+          <p>VCA, NEN 1010, en gemiddeld {site.yearsActive} jaar praktijkervaring. U krijgt een vakman die weet wat hij doet.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-num">03</div>
+          <h3>Snel reageren</h3>
+          <p>Spoed: binnen {site.emergencyResponse} min ter plaatse. Afspraak: binnen 4 werkuren reactie op uw offerteaanvraag.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-num">04</div>
+          <h3>Garantie en nazorg</h3>
+          <p>2 jaar garantie op installatiewerk, 3 maanden op reparaties. En u kunt altijd bellen — wij zijn er.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ReviewsSection />
+
+  <FaqSection client:visible />
+</BaseLayout>

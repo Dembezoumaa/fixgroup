@@ -1,0 +1,41 @@
+---
+// Bedankt-pagina na offerte-aanvraag · /offerte/bedankt/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/content.js';
+---
+<BaseLayout
+  title="Bedankt — we reageren binnen 4 werkuren"
+  description="Uw offerte-aanvraag is ontvangen."
+  noindex={true}
+>
+  <section class="sec" style="padding: 96px 0;">
+    <div class="wrap" style="max-width: 640px; text-align: center;">
+      <div class="form-success" style="padding: 0;">
+        <div class="ok-circle">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 style="font-size: 32px; letter-spacing: -0.025em;">Bedankt — we zijn ermee bezig.</h3>
+        <p style="margin-top: 16px; font-size: 17px; max-width: 440px; margin-left: auto; margin-right: auto;">
+          Uw aanvraag is binnen. We reageren <b>binnen 4 werkuren</b> met een prijsindicatie of een paar verduidelijkende vragen.
+        </p>
+      </div>
+
+      <div style="margin-top: 40px; padding: 24px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; text-align: left;">
+        <div class="mono" style="color: var(--ink-3); font-size: 11px;">HAAST?</div>
+        <div style="margin-top: 8px; font-size: 15px;">
+          Bij een spoedgeval kunt u beter direct bellen — dan zijn we binnen gemiddeld {site.emergencyResponse} minuten ter plaatse.
+        </div>
+        <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href={`tel:${site.phoneRaw}`} class="btn btn-red">Bel {site.phone}</a>
+          <a href={`https://wa.me/${site.whatsapp.replace('+', '')}`} class="btn btn-ghost">WhatsApp</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <a href="/" class="btn btn-ghost btn-sm">← Terug naar home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

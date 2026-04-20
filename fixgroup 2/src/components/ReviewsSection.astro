@@ -1,0 +1,52 @@
+---
+import { reviews, site } from '../data/content.js';
+
+function renderStars(n = 5) {
+  return Array.from({ length: n }).map(() => '★').join('');
+}
+---
+<section class="sec">
+  <div class="wrap">
+    <div class="reviews-head">
+      <div>
+        <div class="eyebrow">Reviews · Google</div>
+        <h2 class="h2" style="margin-top: 8px; max-width: 440px">
+          Klanten waarderen ons met <span style="color: var(--red)">{site.rating.toString().replace('.', ',')}</span> uit 5.
+        </h2>
+      </div>
+      <div class="score">
+        <div class="v">{site.rating.toString().replace('.', ',')}</div>
+        <div>
+          <span class="stars">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+          <div class="out">{site.reviewCount} reviews</div>
+        </div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      {reviews.map((r) => (
+        <div class="review">
+          <span class="stars">
+            {Array.from({ length: r.rating }).map(() => (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            ))}
+          </span>
+          <div class="quote">"{r.quote}"</div>
+          <div class="meta">
+            <div class="avatar">{r.who[0]}</div>
+            <div>
+              <div class="who">{r.who}</div>
+              <div class="when">{r.when}</div>
+            </div>
+            <div class="tag">{r.branch}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

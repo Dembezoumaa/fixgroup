@@ -1,0 +1,100 @@
+---
+// Overzichtspagina van alle takken · /diensten/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqSection from '../../components/FaqSection.jsx';
+import { branches, site } from '../../data/content.js';
+
+const totalServices = branches.reduce((sum, b) => sum + b.services.length, 0);
+---
+<BaseLayout
+  title="Alle diensten — 4 takken, één team"
+  description={`${site.name}: loodgieters, elektriciens, schoonmaak en 24/7 klussen. ${totalServices} diensten in totaal, vanuit Hilversum actief in heel Nederland.`}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Diensten</span>
+    </nav>
+  </div>
+
+  <section class="hub-hero">
+    <div class="wrap">
+      <div class="hub-hero-grid">
+        <div>
+          <div class="eyebrow">Alle diensten</div>
+          <h1 style="margin-top: 16px;">Vier takken.<br />Eén team.<br />Eén aanspreekpunt.</h1>
+          <p class="tagline">
+            Van lekkende kraan tot complete verbouwing, van wekelijkse schoonmaak tot spoedstoring 's nachts. {site.name} regelt het — met gecertificeerde vakmensen en een vaste prijs vooraf.
+          </p>
+          <div style="margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/offerte/" class="btn btn-red btn-lg">Offerte aanvragen →</a>
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-ghost btn-lg">Bel {site.phone}</a>
+          </div>
+        </div>
+        <div class="hub-hero-stats">
+          <div class="s">
+            <div class="v">{totalServices}</div>
+            <div class="l">Diensten totaal</div>
+          </div>
+          <div class="s">
+            <div class="v">4</div>
+            <div class="l">Takken onder één dak</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.emergencyResponse} min</div>
+            <div class="l">Reactietijd bij spoed</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.rating.toString().replace('.', ',')}/5</div>
+            <div class="l">{site.reviewCount} reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        {branches.map((b) => (
+          <div class="branch-panel" style={`--tab-color: ${b.color}; --tab-bg: ${b.tint};`}>
+            <div class="branch-panel-l">
+              <span class="branch-tag">
+                <span style={`width: 6px; height: 6px; border-radius: 50%; background: ${b.color};`}></span>
+                {b.name}
+              </span>
+              <h3>{b.tagline}</h3>
+              <p class="branch-panel-desc">{b.desc}</p>
+              <div class="branch-services">
+                {b.services.map((s) => (
+                  <a href={`/diensten/${b.slug}/${s.slug}/`}>
+                    <span>
+                      {s.title}
+                      {s.spoed && <span style="color: var(--red); margin-left: 6px; font-size: 10px;">● SPOED</span>}
+                    </span>
+                    <svg class="arr" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                ))}
+              </div>
+              <div class="branch-cta">
+                <a href={`/diensten/${b.slug}/`} class="btn btn-dark btn-sm">Bekijk tak →</a>
+                <a href="/offerte/" class="btn btn-ghost btn-sm">Offerte</a>
+              </div>
+            </div>
+            <div class="branch-panel-r" style={`background: ${b.tint};`}>
+              <div style="font-family: var(--f-mono); font-size: 120px; font-weight: 600; letter-spacing: -0.05em; color: rgba(0,0,0,0.08); line-height: 0.9;">
+                {String(branches.indexOf(b) + 1).padStart(2, '0')}
+              </div>
+              <div style="font-size: 14px; color: var(--ink-2); max-width: 240px;">
+                {b.services.length} diensten · inzetbaar vanaf morgen
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <FaqSection client:visible />
+</BaseLayout>

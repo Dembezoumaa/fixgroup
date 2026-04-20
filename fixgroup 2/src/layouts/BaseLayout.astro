@@ -1,0 +1,69 @@
+---
+// Centrale layout voor alle pagina's. Zorgt voor SEO, meta-tags, font-loading.
+import '../styles/global.css';
+import Header from '../components/Header.jsx';
+import Footer from '../components/Footer.astro';
+import StickyCallBar from '../components/StickyCallBar.astro';
+import { site } from '../data/content.js';
+
+const {
+  title,
+  description,
+  image = '/img/og-default.jpg',
+  canonical,
+  noindex = false,
+  structuredData,
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — Vakmannen voor elk probleem · 24/7`;
+const pageDesc = description || `${site.name}: loodgieter, elektricien, schoonmaak en 24/7 service. Binnen 45 min ter plaatse vanuit Hilversum.`;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL(image, Astro.site).toString();
+---
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#E11D2E" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    {/* Open Graph / Social */}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {/* Fonts — preconnect + display=swap voor snelheid */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    {/* Favicon — placeholder, vervang met eigen bestand */}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    {/* Structured data (JSON-LD) per pagina */}
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+  </head>
+  <body data-density="normal" data-spoed="normal" data-hero="photo">
+    <Header client:load />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <StickyCallBar />
+  </body>
+</html>

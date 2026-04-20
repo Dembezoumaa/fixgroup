@@ -1,0 +1,252 @@
+---
+// Dienst-detail · /diensten/[branch]/[service]/
+// Genereert alle 31 combinaties: 8+7+8+8 diensten verdeeld over 4 takken.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FaqSection from '../../../components/FaqSection.jsx';
+import SpoedBanner from '../../../components/SpoedBanner.astro';
+import { branches, site } from '../../../data/content.js';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const b of branches) {
+    for (const s of b.services) {
+      paths.push({
+        params: { branch: b.slug, service: s.slug },
+        props: { branch: b, service: s },
+      });
+    }
+  }
+  return paths;
+}
+
+const { branch, service } = Astro.props;
+
+// Gerelateerde diensten: andere diensten uit dezelfde tak
+const related = branch.services.filter((x) => x.slug !== service.slug).slice(0, 3);
+
+// Dynamische meta
+const metaTitle = `${service.title} · ${branch.name} · ${site.address.city}`;
+const metaDesc = `${service.desc} ${site.name}: ${site.yearsActive} jaar ervaring, 24/7 bereikbaar, gem. ${site.emergencyResponse} min reactietijd.`;
+
+// Structured data — Service
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: service.title,
+  serviceType: branch.name,
+  provider: {
+    '@type': 'LocalBusiness',
+    name: site.name,
+    telephone: site.phoneRaw,
+  },
+  areaServed: { '@type': 'City', name: site.address.city },
+  description: service.desc,
+};
+---
+<BaseLayout
+  title={metaTitle}
+  description={metaDesc}
+  structuredData={structuredData}
+>
+  {/* Breadcrumb */}
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <a href="/#diensten">Diensten</a>
+      <span class="sep">/</span>
+      <a href={`/diensten/${branch.slug}/`}>{branch.short}</a>
+      <span class="sep">/</span>
+      <span>{service.title}</span>
+    </nav>
+  </div>
+
+  {/* Detail hero */}
+  <section style="padding: 32px 0 64px;">
+    <div class="wrap">
+      <div class="detail-hero-grid">
+        <div class="detail-hero">
+          {service.spoed && (
+            <span class="detail-spoed-badge">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--red); display: inline-block;"></span>
+              24/7 Spoeddienst · gem. {site.emergencyResponse} min
+            </span>
+          )}
+          <div class="eyebrow" style={`color: ${branch.color};`}>
+            {branch.name}
+          </div>
+          <h1 style="margin-top: 8px;">{service.title}</h1>
+          <p style="margin-top: 20px; font-size: 18px; color: var(--ink-2); line-height: 1.55; max-width: 560px;">
+            {service.desc}
+          </p>
+
+          {/* Highlights */}
+          <div style="margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 520px;">
+            <div style="padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;">
+              <div style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-3);">VAKMANSCHAP</div>
+              <div style="margin-top: 4px; font-size: 15px; font-weight: 600;">Gecertificeerd</div>
+              <div style="font-size: 12px; color: var(--ink-2); margin-top: 2px;">VCA / NEN 1010</div>
+            </div>
+            <div style="padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;">
+              <div style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-3);">GARANTIE</div>
+              <div style="margin-top: 4px; font-size: 15px; font-weight: 600;">Tot 2 jaar</div>
+              <div style="font-size: 12px; color: var(--ink-2); margin-top: 2px;">Op installatiewerk</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Price / CTA card */}
+        <div class="detail-price-card">
+          <div class="lbl">Vanaf-prijs · incl. btw</div>
+          <div class="v">
+            <span class="from">vanaf</span>
+            €69
+          </div>
+          <div class="sub">
+            Eindprijs is altijd vooraf bekend. Geen verrassingen, geen kleine lettertjes.
+          </div>
+          <div class="ctas">
+            <a href="/offerte/" class="btn btn-red btn-lg">Offerte in 2 min →</a>
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-ghost btn-lg">Bel {site.phone}</a>
+          </div>
+          <div class="trust">
+            <div class="line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Vaste prijs, geen voorrijkosten bij afspraak
+            </div>
+            <div class="line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Garantie op uitgevoerd werk
+            </div>
+            <div class="line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              {site.reviewCount} reviews · {site.rating.toString().replace('.', ',')}/5
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Wel / niet */}
+  <section class="sec" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="two-col">
+        <div class="pane">
+          <h3>Wél inbegrepen</h3>
+          <ul>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Voorbezoek en heldere prijsindicatie
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Alle benodigde materialen en gereedschap
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Vakkundige uitvoering door gecertificeerd team
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Netjes opgeleverd — we ruimen op
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Factuur met btw-specificatie en garantie
+            </li>
+          </ul>
+        </div>
+        <div class="pane">
+          <h3>Niet standaard</h3>
+          <ul>
+            <li>
+              <svg class="ic x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Sloop- of constructiewerk (kan op offerte)
+            </li>
+            <li>
+              <svg class="ic x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Bijzondere materialen (na afstemming prijs)
+            </li>
+            <li>
+              <svg class="ic x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Afvoer van grote hoeveelheden afval (op aanvraag)
+            </li>
+            <li>
+              <svg class="ic x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Vergunningen (wij helpen adviseren)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* 4-step process */}
+  <section class="sec" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="eyebrow">Hoe het werkt</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">Van aanvraag tot afronding — in 4 stappen.</h2>
+      <div class="stepline">
+        <div class="sl">
+          <div class="n">01 · CONTACT</div>
+          <div class="t">U neemt contact op</div>
+          <div class="d">Telefoon, WhatsApp of offerteformulier. Geef kort aan wat u zoekt.</div>
+        </div>
+        <div class="sl">
+          <div class="n">02 · OFFERTE</div>
+          <div class="t">Heldere prijs</div>
+          <div class="d">Binnen 4 werkuren een eerlijke prijsindicatie of vaste offerte.</div>
+        </div>
+        <div class="sl">
+          <div class="n">03 · UITVOERING</div>
+          <div class="t">De vakman komt</div>
+          <div class="d">Op afspraak of {service.spoed ? `binnen ${site.emergencyResponse} min bij spoed.` : 'op het afgesproken moment.'}</div>
+        </div>
+        <div class="sl">
+          <div class="n">04 · OPLEVERING</div>
+          <div class="t">Netjes afgerond</div>
+          <div class="d">Met factuur, garantie en een tevreden klant.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {service.spoed && <SpoedBanner />}
+
+  {/* Gerelateerde diensten */}
+  {related.length > 0 && (
+    <section class="sec" style="padding-top: 0;">
+      <div class="wrap">
+        <div class="eyebrow">Ook in {branch.short}</div>
+        <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">Gerelateerde diensten.</h2>
+        <div class="related-grid">
+          {related.map((r) => (
+            <a href={`/diensten/${branch.slug}/${r.slug}/`} class="service-card">
+              <div class="s-num">→</div>
+              <h3>{r.title}</h3>
+              <p>{r.desc}</p>
+              <div class="foot">
+                {r.spoed ? (
+                  <span class="spoed-tag">● SPOED</span>
+                ) : (
+                  <span style="font-size: 12px; color: var(--ink-3); font-family: var(--f-mono); letter-spacing: 0.04em;">OP AFSPRAAK</span>
+                )}
+                <span class="arr-circle">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div style="margin-top: 24px;">
+          <a href={`/diensten/${branch.slug}/`} class="btn btn-ghost">
+            Alle diensten in {branch.short} →
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <FaqSection client:visible />
+</BaseLayout>

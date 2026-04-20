@@ -1,0 +1,140 @@
+---
+// Werkgebied per plaats · /werkgebied/[plaats]/
+// Genereert SEO-pagina voor elke kernplaats.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqSection from '../../components/FaqSection.jsx';
+import SpoedBanner from '../../components/SpoedBanner.astro';
+import ReviewsSection from '../../components/ReviewsSection.astro';
+import { workgebied, branches, site } from '../../data/content.js';
+
+export function getStaticPaths() {
+  return workgebied.map((plaats) => ({
+    params: { plaats: plaats.toLowerCase() },
+    props: { plaats },
+  }));
+}
+
+const { plaats } = Astro.props;
+const metaTitle = `Vakman in ${plaats} — 24/7 · loodgieter, elektricien, klussen`;
+const metaDesc = `${site.name} werkt dagelijks in ${plaats}. Loodgieter, elektricien, schoonmaak en klussen — 24/7 bereikbaar, gem. reactietijd ${site.emergencyResponse} min.`;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: `${site.name} ${plaats}`,
+  telephone: site.phoneRaw,
+  areaServed: { '@type': 'City', name: plaats },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    postalCode: site.address.postalCode,
+    addressLocality: site.address.city,
+    addressCountry: site.address.country,
+  },
+};
+---
+<BaseLayout
+  title={metaTitle}
+  description={metaDesc}
+  structuredData={structuredData}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <a href="/werkgebied/">Werkgebied</a>
+      <span class="sep">/</span>
+      <span>{plaats}</span>
+    </nav>
+  </div>
+
+  <section class="hub-hero">
+    <div class="wrap">
+      <div class="hub-hero-grid">
+        <div>
+          <div class="eyebrow">Werkgebied</div>
+          <h1 style="margin-top: 16px;">Vakman in<br /><span style="color: var(--red)">{plaats}</span>.<br />24/7 bereikbaar.</h1>
+          <p class="tagline">
+            Of het nu gaat om een lekkage midden in de nacht, een kapotte groep of een geplande renovatie — {site.name} rijdt dagelijks naar {plaats}. Vanuit {site.address.city} zijn we er snel.
+          </p>
+          <div style="margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/offerte/" class="btn btn-red btn-lg">Offerte in {plaats} →</a>
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-ghost btn-lg">Bel {site.phone}</a>
+          </div>
+        </div>
+        <div class="hub-hero-stats">
+          <div class="s">
+            <div class="v">{site.emergencyResponse}–75 min</div>
+            <div class="l">Reactietijd naar {plaats}</div>
+          </div>
+          <div class="s">
+            <div class="v">24/7</div>
+            <div class="l">Ook weekend &amp; nacht</div>
+          </div>
+          <div class="s">
+            <div class="v">{branches.reduce((s, b) => s + b.services.length, 0)}</div>
+            <div class="l">Diensten beschikbaar</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.rating.toString().replace('.', ',')}/5</div>
+            <div class="l">{site.reviewCount} reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Takken beschikbaar in plaats */}
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow">Onze takken in {plaats}</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">
+        Alle diensten, ook bij u in de buurt.
+      </h2>
+      <div class="services-grid">
+        {branches.map((b, i) => (
+          <a href={`/diensten/${b.slug}/`} class="service-card">
+            <div class="s-num">{String(i + 1).padStart(2, '0')}</div>
+            <h3 style={`color: ${b.color};`}>{b.name}</h3>
+            <p>{b.desc}</p>
+            <div class="foot">
+              <span style="font-size: 12px; color: var(--ink-3); font-family: var(--f-mono); letter-spacing: 0.04em;">
+                {b.services.length} DIENSTEN
+              </span>
+              <span class="arr-circle">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <SpoedBanner
+    title={`Spoed in ${plaats}? Bel direct.`}
+    text={`We rijden 24/7 naar ${plaats} vanuit ${site.address.city}. Lekkage, stroomstoring of acute schade — een vakman staat snel voor uw deur.`}
+  />
+
+  <ReviewsSection />
+
+  {/* Andere plaatsen */}
+  <section class="sec" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="eyebrow">Andere plaatsen</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 24px;">Ook actief in deze steden.</h2>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        {workgebied.filter((p) => p !== plaats).map((p) => (
+          <a
+            href={`/werkgebied/${p.toLowerCase()}/`}
+            style="padding: 8px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--ink); text-decoration: none;"
+          >
+            {p}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <FaqSection client:visible />
+</BaseLayout>

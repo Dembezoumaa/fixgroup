@@ -1,0 +1,190 @@
+---
+// Hub-pagina per tak · /diensten/[branch]/
+// getStaticPaths genereert: /diensten/24-7-service/, /diensten/cleaning/, /diensten/electra/, /diensten/loodgieters/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqSection from '../../components/FaqSection.jsx';
+import SpoedBanner from '../../components/SpoedBanner.astro';
+import ReviewsSection from '../../components/ReviewsSection.astro';
+import { branches, reviews, site } from '../../data/content.js';
+
+export function getStaticPaths() {
+  return branches.map((b) => ({
+    params: { branch: b.slug },
+    props: { branch: b },
+  }));
+}
+
+const { branch } = Astro.props;
+
+// Alleen reviews van deze tak tonen (fallback: alle reviews)
+const branchReviews = reviews.filter((r) => r.branch.toLowerCase() === branch.short.toLowerCase());
+const hasSpoed = branch.services.some((s) => s.spoed);
+
+// Structured data — Service
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: branch.name,
+  provider: {
+    '@type': 'LocalBusiness',
+    name: site.name,
+    telephone: site.phoneRaw,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.street,
+      postalCode: site.address.postalCode,
+      addressLocality: site.address.city,
+      addressCountry: site.address.country,
+    },
+  },
+  areaServed: { '@type': 'City', name: site.address.city },
+  description: branch.desc,
+};
+---
+<BaseLayout
+  title={branch.metaTitle}
+  description={branch.metaDesc}
+  structuredData={structuredData}
+>
+  {/* Breadcrumb */}
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <a href="/#diensten">Diensten</a>
+      <span class="sep">/</span>
+      <span>{branch.short}</span>
+    </nav>
+  </div>
+
+  {/* Hub hero */}
+  <section class="hub-hero">
+    <div class="wrap">
+      <div class="hub-hero-grid">
+        <div>
+          <span class="branch-tag" style={`background: ${branch.tint}; color: ${branch.color};`}>
+            <span style={`width: 6px; height: 6px; border-radius: 50%; background: ${branch.color};`}></span>
+            {branch.name}
+          </span>
+          <h1 style="margin-top: 16px;">{branch.tagline}</h1>
+          <p class="tagline">{branch.desc}</p>
+          <div style="margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/offerte/" class="btn btn-red btn-lg">Offerte aanvragen →</a>
+            <a href={`tel:${site.phoneRaw}`} class="btn btn-ghost btn-lg">Bel {site.phone}</a>
+          </div>
+        </div>
+        <div class="hub-hero-stats">
+          <div class="s">
+            <div class="v">{branch.services.length}</div>
+            <div class="l">Diensten in deze tak</div>
+          </div>
+          <div class="s">
+            <div class="v" style={`color: ${branch.color};`}>{site.emergencyResponse} min</div>
+            <div class="l">Gem. reactietijd</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.yearsActive} jr</div>
+            <div class="l">Ervaring in vak</div>
+          </div>
+          <div class="s">
+            <div class="v">{site.rating.toString().replace('.', ',')}/5</div>
+            <div class="l">{site.reviewCount} reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Services grid */}
+  <section class="sec">
+    <div class="wrap">
+      <div class="eyebrow">Alle diensten · {branch.short}</div>
+      <h2 class="h2" style="margin-top: 8px; margin-bottom: 32px;">
+        {branch.services.length} diensten — van klein tot groot.
+      </h2>
+      <div class="services-grid">
+        {branch.services.map((s, i) => (
+          <a href={`/diensten/${branch.slug}/${s.slug}/`} class="service-card">
+            <div class="s-num">{String(i + 1).padStart(2, '0')}</div>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <div class="foot">
+              {s.spoed ? (
+                <span class="spoed-tag">● SPOED 24/7</span>
+              ) : (
+                <span style="font-size: 12px; color: var(--ink-3); font-family: var(--f-mono); letter-spacing: 0.04em;">OP AFSPRAAK</span>
+              )}
+              <span class="arr-circle">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Waarom wij */}
+  <section class="sec" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="two-col">
+        <div class="pane">
+          <h3>Wat u van ons mag verwachten</h3>
+          <ul>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Gecertificeerde vakmensen met gemiddeld {site.yearsActive} jaar ervaring
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Vaste prijs vooraf — geen nacalculatie of verrassingen
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Garantie: 2 jaar op installaties, 3 maanden op reparaties
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Nette oplevering — we laten het schoon achter
+            </li>
+            <li>
+              <svg class="ic c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Eén aanspreekpunt, ook bij meerdere takken tegelijk
+            </li>
+          </ul>
+        </div>
+        <div class="pane dark">
+          <h3>Hoe het werkt — 4 stappen</h3>
+          <div class="stepline" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">
+            <div class="sl" style="background: transparent;">
+              <div class="n">01</div>
+              <div class="t">U belt of stuurt</div>
+              <div class="d" style="color: rgba(255,255,255,0.7);">Telefoon, WhatsApp of offerteformulier.</div>
+            </div>
+            <div class="sl" style="background: transparent;">
+              <div class="n">02</div>
+              <div class="t">Wij plannen</div>
+              <div class="d" style="color: rgba(255,255,255,0.7);">Zelfde werkdag contact, heldere prijs.</div>
+            </div>
+            <div class="sl" style="background: transparent;">
+              <div class="n">03</div>
+              <div class="t">Vakman komt</div>
+              <div class="d" style="color: rgba(255,255,255,0.7);">Op afspraak of {site.emergencyResponse} min bij spoed.</div>
+            </div>
+            <div class="sl" style="background: transparent;">
+              <div class="n">04</div>
+              <div class="t">Oplevering</div>
+              <div class="d" style="color: rgba(255,255,255,0.7);">Netjes, met factuur en garantie.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {hasSpoed && <SpoedBanner />}
+
+  {branchReviews.length > 0 && <ReviewsSection />}
+
+  <FaqSection client:visible />
+</BaseLayout>

@@ -1,0 +1,64 @@
+---
+// Privacyverklaring · /privacy/
+// PLACEHOLDER — laat juridisch controleren vóór go-live.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/content.js';
+---
+<BaseLayout
+  title="Privacyverklaring"
+  description={`Privacyverklaring van ${site.name} — hoe wij omgaan met uw persoonsgegevens.`}
+  noindex={true}
+>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Broodkruimel">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span>Privacy</span>
+    </nav>
+  </div>
+
+  <section class="sec" style="padding-top: 24px;">
+    <div class="wrap" style="max-width: 720px;">
+      <div class="eyebrow">Juridisch</div>
+      <h1 class="h1" style="margin-top: 8px;">Privacyverklaring</h1>
+
+      <div style="margin-top: 16px; padding: 16px; background: var(--red-50, #FDE8EA); border-left: 3px solid var(--red); border-radius: 6px; font-size: 13px;">
+        <b>Concept — laat juridisch controleren</b><br />
+        Dit is een template. Vóór go-live moet deze tekst worden aangepast aan uw exacte verwerkingen en gecontroleerd door een jurist of DPO.
+      </div>
+
+      <div style="margin-top: 40px; font-size: 16px; line-height: 1.7; color: var(--ink-2);">
+        <p>
+          <b>{site.name}</b> ({site.address.street}, {site.address.postalCode} {site.address.city}, KvK {site.kvk}) respecteert uw privacy en verwerkt uw persoonsgegevens alleen voor de doelen waarvoor ze zijn verstrekt en in overeenstemming met de AVG.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Welke gegevens</h2>
+        <p>
+          Wanneer u ons benadert via telefoon, WhatsApp, e-mail of ons offerteformulier, verwerken wij: naam, telefoonnummer, e-mailadres, postcode/adres en een omschrijving van uw vraag.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Waarom</h2>
+        <p>
+          Deze gegevens gebruiken wij uitsluitend om uw aanvraag te beantwoorden, een offerte op te stellen en de werkzaamheden uit te voeren en te factureren.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Bewaartermijn</h2>
+        <p>
+          Uw gegevens bewaren wij niet langer dan noodzakelijk. Administratieve gegevens bewaren wij 7 jaar conform de fiscale bewaarplicht.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Uw rechten</h2>
+        <p>
+          U heeft recht op inzage, correctie, verwijdering en dataportabiliteit. Stuur uw verzoek naar <a href={`mailto:${site.email}`}>{site.email}</a>. U kunt ook een klacht indienen bij de Autoriteit Persoonsgegevens.
+        </p>
+
+        <h2 class="h3" style="margin-top: 32px;">Contact</h2>
+        <p>
+          {site.name}<br />
+          {site.address.street}, {site.address.postalCode} {site.address.city}<br />
+          <a href={`tel:${site.phoneRaw}`}>{site.phone}</a> · <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
